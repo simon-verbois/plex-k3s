@@ -118,6 +118,14 @@ The initial configuration of Plex (adding libraries) will be done via this web i
 
 ## Maintenance
 
+### Update Plex
+
+Run this command to rollout the deployment and update the image
+
+```
+kubectl rollout restart deployment -n plex
+```
+
 ### Database Repair
 
 Just for your information, if one day you encounter an issue with Plex DB, you can try a repair with this well know script.

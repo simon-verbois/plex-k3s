@@ -23,7 +23,6 @@ spec:
       containers:
       - name: app
         image: plexinc/pms-docker:latest
-        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 32400
           name: plex-web
