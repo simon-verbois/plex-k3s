@@ -120,10 +120,16 @@ The initial configuration of Plex (adding libraries) will be done via this web i
 
 ### Update Plex
 
-Run this command to rollout the deployment and update the image
+The deployment uses the `plexinc/pms-docker:latest` image. To update to the latest version, you can trigger a rolling update of the deployment, which will force Kubernetes to pull the newest image.
 
+```bash
+kubectl rollout restart deployment/plex-deployment -n plex
 ```
-kubectl rollout restart deployment -n plex
+
+You can monitor the progress of the update with:
+
+```bash
+kubectl rollout status deployment/plex-deployment -n plex
 ```
 
 ### Database Repair
