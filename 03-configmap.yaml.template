@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: plex-configmap
+  namespace: plex
+data:
+  TZ: "Europe/Paris"
+  PLEX_UID: "YOUR-USER-UID"
+  PLEX_GID: "YOUR-USER-GID"
+  NVIDIA_VISIBLE_DEVICES: "all"
+  NVIDIA_DRIVER_CAPABILITIES: "all"

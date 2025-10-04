@@ -30,25 +30,35 @@ git clone https://github.com/simon-verbois/plex-k3s-configuration
 cd plex-k3s-configuration
 ```
 
-### 2. Create the secrets file
+### 2. Copy the files
 
-The `PLEX_CLAIM` token is personal and should not be shared. We use a template system.
+Make your own copy of the templates files with this command.
 
-1. **Copy the template:**
 ```bash
-cp 02-secrets.yaml.template 02-secrets.yaml
+for file in *.yaml.template; do mv "$file" "${file%.template}"; done
 ```
-
-2. **Get your token:** Go to [https://www.plex.tv/claim](https://www.plex.tv/claim) to generate a new token. It is valid for a few minutes.
-
-3. **Edit `02-secrets.yaml`** and replace `REPLACE-ME-WITH-YOUR-CLAIM-TOKEN` with the token you just generated.
 
 ### 3. Customize the configuration
 
 You **must** adapt some files to your own environment before applying them.
 
+- **`02-secrets.yaml`**:
+  1. **Get your token:** Go to [https://www.plex.tv/claim](https://www.plex.tv/claim) to generate a new token. It is valid for a few minutes.
+  2. **Edit `02-secrets.yaml`** and replace `REPLACE-ME-WITH-YOUR-CLAIM-TOKEN` with the token you just generated.
+
+<br>
+
+- **`03-configmap.yaml`**:
+  - Change the time zone to `TZ` if needed.
+  - Adjust `PLEX_UID` and `PLEX_GID` to match your user GID.
+
+<br>
+
 - **`04-deployment.yaml`**:
-- Edit the `volumes` section at the end of the file. Replace the `hostPath` paths (`/data/disk1`, `/data/md0/media`, etc.) with the actual paths where your media resides on your Kubernetes nodes. ```yaml
+  - Adjust the <b>fsGroup</b> to match your user GID.
+  - Edit the `volumes` section at the end of the file. Replace the `hostPath` paths (`/data/disk1`, `/data/md0/media`, etc.) with the actual paths where your media resides on your Kubernetes nodes. 
+
+```yaml
 volumes:
 # ... other volumes ...
 - name: media
@@ -58,9 +68,29 @@ type: Directory
 # Add as many hostPath volumes as needed for your libraries
 ```
 
+<br>
+
+- **`05-service.yaml`**:
+  - Has we use the host mode for the network (for network discovery)), we have to create a dedicated endpoint with your node IP
+ 
+```yaml
+endpoints:
+  - addresses:
+      - "xx.xx.xx.xx" # <-- EDIT THIS
+```
+
+<br>
+
 - **`06-ingress.yaml`**:
-- Modify the `host` to use your own domain name.
-- Adapt the ingress annotations to your Ingress Controller if you are not using Traefik or if your `cert-resolver` has a different name. ```yaml
+  - Depending on your ingress, you have to set an annotation for the TLS certificate generation
+  - Modify the `host` to use your own domain name.
+  - Adapt the ingress annotations to your Ingress Controller if you are not using Traefik or if your `cert-resolver` has a different name. 
+
+```yaml
+# ...
+  annotations:
+    traefik.ingress.kubernetes.io/router.tls.certresolver: your-ingress-certresolver-name
+# ...
 spec:
 rules:
 - host: "plex.your-domain.com" # <-- EDIT THIS
@@ -69,10 +99,6 @@ tls:
 - hosts:
 - "plex.your-domain.com" # <-- EDIT THIS
 ```
-
-- **(Optional) `03-configmap.yaml`**:
-- Change the time zone to `TZ` if needed.
-- Adjust `PLEX_UID` and `PLEX_GID` to match the permissions of your media files on the host.
 
 ### 4. Deploy Plex
 

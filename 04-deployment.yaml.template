@@ -1,0 +1,88 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: plex-deployment
+  namespace: plex
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: plex
+  template:
+    metadata:
+      labels:
+        app: plex
+    spec:
+      hostNetwork: true
+      runtimeClassName: nvidia
+      securityContext:
+        fsGroup: 1003
+        runAsUser: 0
+        runAsGroup: 0
+      containers:
+      - name: app
+        image: plexinc/pms-docker:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 32400
+          name: plex-web
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /identity
+            port: 32400
+          initialDelaySeconds: 60 
+          periodSeconds: 15 
+          timeoutSeconds: 5 
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /identity
+            port: 32400
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 5
+        resources:
+          limits:
+            nvidia.com/gpu.shared: "1"
+        envFrom:
+        - configMapRef:
+            name: plex-configmap
+        - secretRef:
+            name: plex-secret
+        volumeMounts:
+        - name: plex-config
+          mountPath: /config
+        - name: plex-backup
+          mountPath: /db_backup
+        - name: plex-transcode
+          mountPath: /transcode
+        - name: plex-run
+          mountPath: /run
+        - name: movies
+          mountPath: /media/movies
+        - name: shows
+          mountPath: /media/shows
+
+      volumes:
+      - name: plex-config
+        persistentVolumeClaim:
+          claimName: plex-config-pvc
+      - name: plex-transcode
+        persistentVolumeClaim:
+          claimName: plex-transcode-pvc
+      - name: plex-run
+        persistentVolumeClaim:
+          claimName: plex-run-pvc
+      - name: plex-backup
+        persistentVolumeClaim:
+          claimName: plex-backup-pvc
+      - name: movies
+        hostPath:
+          path: /data/movies
+          type: Directory
+      - name: shows
+        hostPath:
+          path: /data/shows
+          type: Directory

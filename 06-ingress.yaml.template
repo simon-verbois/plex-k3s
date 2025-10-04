@@ -1,0 +1,24 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: plex-ingress
+  namespace: plex
+  annotations:
+    traefik.ingress.kubernetes.io/router.tls.certresolver: your-ingress-certresolver-name
+spec:
+  rules:
+  - host: "plex.your-domain.com"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: plex-service
+            port:
+              number: 32400
+  tls:
+  - hosts:
+    - "plex.your-domain.com"
+
