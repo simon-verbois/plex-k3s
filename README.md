@@ -118,7 +118,7 @@ The initial configuration of Plex (adding libraries) will be done via this web i
 
 ## Maintenance
 
-### Update Plex
+### Updating the Plex Image
 
 The deployment uses the `plexinc/pms-docker:latest` image. To update to the latest version, you can trigger a rolling update of the deployment, which will force Kubernetes to pull the newest image.
 
