@@ -1,6 +1,6 @@
 # Deploying Plex Media Server on K3s/Kubernetes
 
-This repository contains a set of Kubernetes manifests for deploying Plex Media Server on a K3s cluster (or any other Kubernetes cluster).
+This repository contains a set of Kubernetes manifests for deploying Plex Media Server on a K3s cluster (tested on single node cluster) (or any other Kubernetes cluster).
 
 The configuration is designed to be simple and utilizes advanced features such as hardware transcoding via NVIDIA GPUs.
 
