@@ -17,7 +17,7 @@ spec:
       hostNetwork: true
       runtimeClassName: nvidia
       securityContext:
-        fsGroup: 1003
+        fsGroup: YOUR-USER-GID
         runAsUser: 0
         runAsGroup: 0
       containers:
