@@ -132,6 +132,14 @@ You can monitor the progress of the update with:
 kubectl rollout status deployment/plex-deployment -n plex
 ```
 
+## Uninstallation
+
+To remove all the resources created by these manifests, run the following command:
+
+```bash
+kubectl delete -f .
+```
+
 ### Database Repair
 
 Just for your information, if one day you encounter an issue with Plex DB, you can try a repair with this well know script.
