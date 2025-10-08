@@ -14,12 +14,9 @@ spec:
       labels:
         app: plex
     spec:
-      hostNetwork: true
       runtimeClassName: nvidia
       securityContext:
-        fsGroup: YOUR-USER-GID # <-- Add your own user UID
-        runAsUser: 0 # <-- Add your own user UID
-        runAsGroup: 0 # <-- Add your own user UID
+        fsGroup: 1003 # <-- Add your own user UID
       containers:
       - name: app
         image: plexinc/pms-docker:latest
@@ -27,13 +24,37 @@ spec:
         - containerPort: 32400
           name: plex-web
           protocol: TCP
+        - containerPort: 3005
+          name: plex-companion
+          protocol: TCP
+        - containerPort: 8324
+          name: plex-relay
+          protocol: TCP
+        - containerPort: 32469
+          name: plex-dlna-tcp
+          protocol: TCP
+        - containerPort: 1900
+          name: plex-dlna-udp
+          protocol: UDP
+        - containerPort: 32410
+          name: gdm-1-udp
+          protocol: UDP
+        - containerPort: 32412
+          name: gdm-2-udp
+          protocol: UDP
+        - containerPort: 32413
+          name: gdm-3-udp
+          protocol: UDP
+        - containerPort: 32414
+          name: gdm-4-udp
+          protocol: UDP
         livenessProbe:
           httpGet:
             path: /identity
             port: 32400
-          initialDelaySeconds: 60 
-          periodSeconds: 15 
-          timeoutSeconds: 5 
+          initialDelaySeconds: 60
+          periodSeconds: 15
+          timeoutSeconds: 5
           failureThreshold: 3
         readinessProbe:
           httpGet:
@@ -63,6 +84,7 @@ spec:
           mountPath: /media/movies
         - name: shows
           mountPath: /media/shows
+
 
       volumes:
       - name: plex-config
