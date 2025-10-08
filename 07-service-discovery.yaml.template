@@ -1,0 +1,43 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: plex-service-discovery
+  namespace: plex
+spec:
+  type: LoadBalancer
+  selector:
+    app: plex
+  ports:
+  - name: plex-web
+    port: 32400
+    targetPort: 32400
+    protocol: TCP
+  - name: plex-relay
+    port: 8324
+    targetPort: 8324
+    protocol: TCP
+  - name: plex-dlna-tcp
+    port: 32469
+    targetPort: 32469
+    protocol: TCP
+  - name: plex-dlna-udp
+    port: 1900
+    targetPort: 1900
+    protocol: UDP
+  - name: gdm-1-udp
+    port: 32410
+    targetPort: 32410
+    protocol: UDP
+  - name: gdm-2-udp
+    port: 32412
+    targetPort: 32412
+    protocol: UDP
+  - name: gdm-3-udp
+    port: 32413
+    targetPort: 32413
+    protocol: UDP
+  - name: gdm-4-udp
+    port: 32414
+    targetPort: 32414
+    protocol: UDP

@@ -20,9 +20,6 @@ spec:
         fsGroup: YOUR-USER-GID # <-- Add your own user UID
         runAsUser: 0 # <-- Add your own user UID
         runAsGroup: 0 # <-- Add your own user UID
-        sysctls:
-          - name: net.ipv4.ip_unprivileged_port_start
-            value: "0"
       containers:
       - name: app
         image: plexinc/pms-docker:latest
@@ -47,7 +44,7 @@ spec:
           timeoutSeconds: 5
         resources:
           limits:
-            nvidia.com/gpu.shared: "1"
+            nvidia.com/gpu: 1
         envFrom:
         - configMapRef:
             name: plex-configmap
