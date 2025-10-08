@@ -8,11 +8,15 @@ The configuration is designed to separate application configuration, metadata, a
 
 ## Prerequisites
 
-1. A working Kubernetes cluster (e.g., K3s, k0s, RKE2).
-2. The `kubectl` command-line tool configured to access your cluster.
-3. An **Ingress Controller** installed in the cluster (e.g., Traefik, NGINX Ingress).
-4. A **StorageClass** configured to dynamically provision storage volumes. K3s includes `local-path-provisioner`, which works for this configuration.
-5. **(Optional)** For hardware transcoding: an NVIDIA GPU on one of the nodes and the [NVIDIA Device Plugin for Kubernetes](https://github.com/NVIDIA/k8s-device-plugin) installed.
+1. A working Kubernetes cluster (e.g., MicroK8s, K3s, k0s). This guide assumes a bare-metal cluster.
+2. An Ingress Controller installed and configured. This setup is tested with Traefik.
+3. A Load Balancer provider for services is required for local network auto-discovery (DLNA/GDM).
+4. Storage Configuration: This setup separates configuration data from media data.
+5. Plex Claim Token: To claim your new server and associate it with your Plex account, you need a claim token.
+6. User and Group IDs (PUID/PGID): To avoid file permission issues on your storage volumes, the Plex container should run with the same user and group ID as the owner of your media and configuration files.
+7. (Optional) NVIDIA GPU for Hardware Transcoding:
+
+<br>
 
 ## Installation
 
