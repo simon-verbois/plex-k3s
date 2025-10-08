@@ -5,8 +5,8 @@ metadata:
   name: plex-configmap
   namespace: plex
 data:
-  TZ: "Europe/Paris"
-  PLEX_UID: "YOUR-USER-UID"
-  PLEX_GID: "YOUR-USER-GID"
+  TZ: "Europe/Paris" # <-- Add your own TZ
+  PLEX_UID: "YOUR-USER-UID" # <-- Add your own user UID
+  PLEX_GID: "YOUR-USER-GID" # <-- Add your own user GID
   NVIDIA_VISIBLE_DEVICES: "all"
   NVIDIA_DRIVER_CAPABILITIES: "all"

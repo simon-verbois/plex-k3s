@@ -5,10 +5,10 @@ metadata:
   name: plex-ingress
   namespace: plex
   annotations:
-    traefik.ingress.kubernetes.io/router.tls.certresolver: your-ingress-certresolver-name
+    traefik.ingress.kubernetes.io/router.tls.certresolver: your-ingress-certresolver-name # <-- Add your TLS resolver name
 spec:
   rules:
-  - host: "plex.your-domain.com"
+  - host: "plex.your-domain.com" # <-- Add you own domain
     http:
       paths:
       - path: /
@@ -20,5 +20,5 @@ spec:
               number: 32400
   tls:
   - hosts:
-    - "plex.your-domain.com"
+    - "plex.your-domain.com" # <-- Add you own domain
 

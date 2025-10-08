@@ -25,6 +25,6 @@ ports:
     port: 32400
 endpoints:
   - addresses:
-      - "xx.xx.xx.xx"
+      - "xx.xx.xx.xx" # <-- Add your node IP
 
 

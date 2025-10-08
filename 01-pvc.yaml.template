@@ -5,11 +5,9 @@ metadata:
   name: plex-config-pvc
   namespace: plex
 spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 10Gi
+  storageClassName: hostpath-sc # <-- Add your own storage class or remove the line
+  accessModes: [ReadWriteOnce]
+  resources: { requests: { storage: 1Gi } }
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -17,11 +15,9 @@ metadata:
   name: plex-backup-pvc
   namespace: plex
 spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 10Gi
+  storageClassName: hostpath-sc # <-- Add your own storage class or remove the line
+  accessModes: [ReadWriteOnce]
+  resources: { requests: { storage: 1Gi } }
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -29,11 +25,9 @@ metadata:
   name: plex-transcode-pvc
   namespace: plex
 spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 10Gi
+  storageClassName: hostpath-sc # <-- Add your own storage class or remove the line
+  accessModes: [ReadWriteOnce]
+  resources: { requests: { storage: 1Gi } }
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -41,8 +35,6 @@ metadata:
   name: plex-run-pvc
   namespace: plex
 spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 10Gi
+  storageClassName: hostpath-sc # <-- Add your own storage class or remove the line
+  accessModes: [ReadWriteOnce]
+  resources: { requests: { storage: 1Gi } }

@@ -17,9 +17,12 @@ spec:
       hostNetwork: true
       runtimeClassName: nvidia
       securityContext:
-        fsGroup: YOUR-USER-GID
-        runAsUser: 0
-        runAsGroup: 0
+        fsGroup: YOUR-USER-GID # <-- Add your own user UID
+        runAsUser: 0 # <-- Add your own user UID
+        runAsGroup: 0 # <-- Add your own user UID
+        sysctls:
+          - name: net.ipv4.ip_unprivileged_port_start
+            value: "0"
       containers:
       - name: app
         image: plexinc/pms-docker:latest
@@ -77,11 +80,11 @@ spec:
       - name: plex-backup
         persistentVolumeClaim:
           claimName: plex-backup-pvc
-      - name: movies
+      - name: movies                     # <-- Add your own movies path
         hostPath:
           path: /data/movies
           type: Directory
-      - name: shows
+      - name: shows                      # <-- Add your own shows path
         hostPath:
           path: /data/shows
           type: Directory

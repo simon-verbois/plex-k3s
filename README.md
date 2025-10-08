@@ -1,17 +1,10 @@
 # Deploying Plex Media Server on K3s/Kubernetes
 
-This repository contains a set of Kubernetes manifests for deploying Plex Media Server on a K3s cluster (tested on single node cluster) (or any other Kubernetes cluster).
+This repository contains a set of Kubernetes manifests for deploying [Plex Media Server](https://www.plex.tv/) on a MicroK8s cluster (tested on single node cluster) it should work any other Kubernetes cluster with some adjustments.
 
-The configuration is designed to be simple and utilizes advanced features such as hardware transcoding via NVIDIA GPUs.
+The configuration is designed to separate application configuration, metadata, and the actual media files for better data management.
 
-## Features
-
-- Simple deployment via `kubectl apply`.
-- Data persistence managed by `PersistentVolumeClaims`.
-- Centralized configuration in a `ConfigMap`.
-- Isolated secrets management (not committed to the repository).
-- Secure exposure via an `Ingress` (tested with Traefik).
-- Support for hardware transcoding via NVIDIA GPUs (optional).
+<br>
 
 ## Prerequisites
 
@@ -26,79 +19,19 @@ The configuration is designed to be simple and utilizes advanced features such a
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/simon-verbois/plex-k3s-configuration
-cd plex-k3s-configuration
+git clone https://github.com/simon-verbois/plex-k8s
+cd plex-k8s
 ```
 
-### 2. Copy the files
-
-Make your own copy of the templates files with this command.
+### 2. Rename the files
 
 ```bash
 for file in *.yaml.template; do mv "$file" "${file%.template}"; done
 ```
 
-### 3. Customize the configuration
+### 3. Custom the configuration files
 
-You **must** adapt some files to your own environment before applying them.
-
-- **`02-secrets.yaml`**:
-  1. **Get your token:** Go to [https://www.plex.tv/claim](https://www.plex.tv/claim) to generate a new token. It is valid for a few minutes.
-  2. **Edit `02-secrets.yaml`** and replace `REPLACE-ME-WITH-YOUR-CLAIM-TOKEN` with the token you just generated.
-
-<br>
-
-- **`03-configmap.yaml`**:
-  - Change the time zone to `TZ` if needed.
-  - Adjust `PLEX_UID` and `PLEX_GID` to match your user GID.
-
-<br>
-
-- **`04-deployment.yaml`**:
-  - Adjust the <b>fsGroup</b> to match your user GID.
-  - Edit the `volumes` section at the end of the file. Replace the `hostPath` paths (`/data/disk1`, `/data/md0/media`, etc.) with the actual paths where your media resides on your Kubernetes nodes. 
-
-```yaml
-volumes:
-# ... other volumes ...
-- name: media
-hostPath:
-path: /path/to/your/movies # <-- EDIT THIS
-type: Directory
-# Add as many hostPath volumes as needed for your libraries
-```
-
-<br>
-
-- **`05-service.yaml`**:
-  - Has we use the host mode for the network (for network discovery)), we have to create a dedicated endpoint with your node IP
- 
-```yaml
-endpoints:
-  - addresses:
-      - "xx.xx.xx.xx" # <-- EDIT THIS
-```
-
-<br>
-
-- **`06-ingress.yaml`**:
-  - Depending on your ingress, you have to set an annotation for the TLS certificate generation
-  - Modify the `host` to use your own domain name.
-  - Adapt the ingress annotations to your Ingress Controller if you are not using Traefik or if your `cert-resolver` has a different name. 
-
-```yaml
-# ...
-  annotations:
-    traefik.ingress.kubernetes.io/router.tls.certresolver: your-ingress-certresolver-name
-# ...
-spec:
-rules:
-- host: "plex.your-domain.com" # <-- EDIT THIS
-# ...
-tls:
-- hosts:
-- "plex.your-domain.com" # <-- EDIT THIS
-```
+You have to adapt the yaml file, follow the hint for each file
 
 ### 4. Deploy Plex
 
@@ -116,6 +49,8 @@ After a few minutes, while the image is downloaded and the pod starts, you shoul
 
 The initial configuration of Plex (adding libraries) will be done via this web interface.
 
+<br>
+
 ## Maintenance
 
 ### Updating the Plex Image
@@ -130,14 +65,6 @@ You can monitor the progress of the update with:
 
 ```bash
 kubectl rollout status deployment/plex-deployment -n plex
-```
-
-## Uninstallation
-
-To remove all the resources created by these manifests, run the following command:
-
-```bash
-kubectl delete -f .
 ```
 
 ### Database Repair
@@ -157,6 +84,20 @@ kubectl cp DBRepair.sh plex/PLEX_POD_NAME:/config/DBRepair.sh -n plex
 ```bash
 kubectl exec -it PLEX_POD_NAME -n plex -- /bin/bash /config/DBRepair.sh
 ```
+
+<br>
+
+## Uninstallation
+
+To remove all the resources created by these manifests, run the following command:
+
+```bash
+kubectl delete -f .
+```
+
+**Note:** This will also delete the `plex` namespace. The `PersistentVolumeClaim` will be deleted, but the actual data on your storage volume might remain, depending on your `StorageClass` reclaim policy.
+
+<br>
 
 ## License
 
