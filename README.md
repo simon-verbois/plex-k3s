@@ -1,4 +1,4 @@
-# Deploying Plex Media Server on K3s/Kubernetes
+# Deploying Plex Media Server on Kubernetes 
 
 This repository contains a set of Kubernetes manifests for deploying [Plex Media Server](https://www.plex.tv/).
 
