@@ -17,6 +17,7 @@ spec:
       runtimeClassName: nvidia
       securityContext:
         fsGroup: 1003 # <-- Add your own user GID
+      hostname: plex
       containers:
       - name: app
         image: plexinc/pms-docker:latest

@@ -1,3 +1,8 @@
+<p align="center">
+  <img src="https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fgithub.com%2Fsimon-verbois%2Fplex-k8s&label=Visitors&countColor=26A65B&style=plastic" alt="Visitor Count" height="28"/>
+  <a href="https://github.com/simon-verbois/plex-k8s/commits/main"><img src="https://img.shields.io/github/last-commit/simon-verbois/plex-k8s?style=plastic" alt="GitHub Last Commit" height="28"/></a>
+</p>
+
 # Deploying Plex Media Server on Kubernetes 
 
 This repository contains a set of Kubernetes manifests for deploying [Plex Media Server](https://www.plex.tv/).
