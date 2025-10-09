@@ -1,6 +1,6 @@
 # Deploying Plex Media Server on K3s/Kubernetes
 
-This repository contains a set of Kubernetes manifests for deploying [Plex Media Server](https://www.plex.tv/) on a MicroK8s cluster (tested on single node cluster) it should work any other Kubernetes cluster with some adjustments.
+This repository contains a set of Kubernetes manifests for deploying [Plex Media Server](https://www.plex.tv/).
 
 The configuration is designed to separate application configuration, metadata, and the actual media files for better data management.
 
